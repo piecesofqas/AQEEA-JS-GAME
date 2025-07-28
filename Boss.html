@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+  <title>AQEEA</title>
+  <style>
+    body {
+      margin: 0;
+      background: url('pics/bggg.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Pixelify Sans', cursive;
+    }
+    canvas {
+      background: transparent;
+      border: 10px solid white;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #000;
+    }
+    .fade-out {
+      opacity: 0;
+      transition: opacity 2s;
+    }
+
+    .boss-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    font-family: 'Pixelify Sans', cursive;
+    align-items: center;
+    font-size: 3rem;
+    animation: fadeOut 2s ease-out 3s forwards;
+    z-index: 10;
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  </style>
+</head>
+<body>
+<canvas id="gameCanvas" width="1200" height="600"></canvas>
+<div class="boss-screen"><b>You've collected all the candies.<br>However, the bunny does not give up easily....<br>FIGHT THE BUNNY AND WIN!</b></div>
+
+<!-- Background Music -->
+<audio id="bgMusic" src="sounds/music.mp3" loop></audio>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const bgImg = new Image();
+bgImg.src = 'pics/bg.png';
+
+const botImg = new Image();
+botImg.src = 'pics/bot.png';
+
+const ballImg = new Image();
+ballImg.src = 'pics/ball.png';
+
+const bgMusic = document.getElementById('bgMusic');
+
+// Game variables
+let hearts = 8;
+let maxAttempts = 10;
+let attemptsLeft = maxAttempts;
+
+const botWidth = 300, botHeight = 300;
+const ballSize = 100;
+let botX = 850, botY = 330;
+let ballX = 120, ballY = 420, ballSpeed = 10;
+
+let ballJumpY = 0;
+let ballJumpUp = true;
+
+let isBallMoving = false;
+let botJumpY = 0;
+let jumpUp = true;
+
+let ballAngle = 0;
+let musicStarted = false;
+
+document.addEventListener('click', () => {
+  if (!isBallMoving && attemptsLeft > 0) {
+    isBallMoving = true;
+    attemptsLeft--;
+
+    if (!musicStarted) {
+      bgMusic.play().catch(e => console.log("Music play error:", e));
+      musicStarted = true;
+    }
+  }
+});
+
+function drawHearts() {
+  ctx.font = "40px Arial";
+  ctx.fillStyle = "red";
+  for (let i = 0; i < hearts; i++) {
+    ctx.fillText("♥️", canvas.width - 70 - i * 50, 50);
+  }
+}
+
+function drawCandies() {
+  ctx.font = "35px Arial";
+  ctx.fillStyle = "#fff";
+  for (let i = 0; i < attemptsLeft; i++) {
+    ctx.fillText("🍬", 50 + i * 40, 50);
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+  // Bot jump
+  if (jumpUp) {
+    botJumpY -= 4;
+    if (botJumpY < -240) jumpUp = false;
+  } else {
+    botJumpY += 3;
+    if (botJumpY > 0) jumpUp = true;
+  }
+
+  ctx.drawImage(botImg, botX, botY + botJumpY, 200, 200);
+
+  // Ball bounce
+  if (ballJumpUp) {
+    ballJumpY -= 2;
+    if (ballJumpY < -280) ballJumpUp = false;
+  } else {
+    ballJumpY += 2;
+    if (ballJumpY > 0) ballJumpUp = true;
+  }
+
+  ctx.drawImage(ballImg, ballX, ballY + ballJumpY, 80, 80);
+
+  if (isBallMoving) {
+    ballX += ballSpeed;
+
+    if (ballX > canvas.width) {
+      resetBall();
+    }
+
+    // Collision detection
+    const botHitbox = {
+      x: botX + 40,
+      y: botY + botJumpY + 50,
+      width: 120,
+      height: 150
+    };
+
+    const ballHitbox = {
+      x: ballX,
+      y: ballY + ballJumpY,
+      width: 80,
+      height: 80
+    };
+
+    if (
+      ballHitbox.x < botHitbox.x + botHitbox.width &&
+      ballHitbox.x + ballHitbox.width > botHitbox.x &&
+      ballHitbox.y < botHitbox.y + botHitbox.height &&
+      ballHitbox.y + ballHitbox.height > botHitbox.y
+    ) {
+      hearts--;
+      resetBall();
+    }
+  }
+
+  // Draw status
+  drawHearts();
+  drawCandies();
+  33
+
+  // Game end logic
+  if (hearts <= 0) {
+    document.body.classList.add('fade-out');
+    setTimeout(() => {
+      window.location.href = 'ending.html';
+    }, 2000);
+  } else if (attemptsLeft === 0 && hearts > 0) {
+      setTimeout(() => {
+        let retry = confirm("You failed! Try again?");
+        if (retry) {
+          location.reload();
+        }
+      }, 200);
+      return; // stop the game loop
+  } else {
+    requestAnimationFrame(draw);
+  }
+}
+
+function resetBall() {
+  ballX = 120;
+  ballY = 420;
+  ballJumpY = 0;
+  ballJumpUp = true;
+  isBallMoving = false;
+}
+
+draw();
+</script>
+</body>
+</html>

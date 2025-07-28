@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AQEEA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-image: url('pics/gm.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      height: 100vh;
+      font-family: 'Pixelify Sans', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bwh img {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 3;
+    }
+
+    .ats img {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    .instruction-box {
+      background-color: rgba(255, 182, 193, 0.95);
+      padding: 50px 40px;
+      border-radius: 25px;
+      max-width: 750px;
+      text-align: center;
+      z-index: 5;
+      position: relative;
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.6);
+    }
+
+    .instruction-box h1 {
+      margin-bottom: 20px;
+      font-size: 36px;
+      color: #d63384;
+    }
+
+    .instruction-box p {
+      font-size: 20px;
+      line-height: 1.7;
+      color: #6c2a4f;
+      margin-bottom: 30px;
+    }
+
+    .ready-btn {
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 20px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .ready-btn:hover {
+      background-color: #ff1493;
+    }
+
+    /* 🔳 Fade-in black screen for transition */
+    .fade-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: black;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 99;
+      transition: opacity 1.5s ease;
+    }
+
+    .fade-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .mom-img, .ellie-img {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="ats"><img src="pics/ats.png"></div>
+  <div class="bwh"><img src="pics/bwhh.png"></div>
+
+  <div class="instruction-box">
+    <h1>How to Play</h1>
+    <p>
+      - There are 3 levels. The last level is the boss level.<br>
+      - Use the arrows or W,A,S,D to move your character.<br>
+      - Press the spacebar to jump.<br>
+      - Avoid tricky obstacles along the way.<br>
+      - Complete the level before the timer ends (60secs).<br>
+      - Collect the candies that was spilt.<br>
+      - Defeat Bunny the Bandit in the final battle!<br>
+      Good luck! 🌟
+    </p>
+    <button class="ready-btn" onclick="fadeOutAndRedirect()">I'm ready!</button>
+  </div>
+
+  <!-- Fade overlay screen -->
+  <div id="fadeOverlay" class="fade-overlay"></div>
+
+  <img src="pics/mom.png" class="mom-img" alt="Mom Image">
+  <img src="pics/ellie.png" class="ellie-img" alt="Ellie Image">
+
+  <script>
+    function fadeOutAndRedirect() {
+      const overlay = document.getElementById('fadeOverlay');
+      overlay.classList.add('active');
+      setTimeout(() => {
+        window.location.href = 'game.html';
+      }, 1500); // Match transition duration
+    }
+  </script>
+</body>
+</html>

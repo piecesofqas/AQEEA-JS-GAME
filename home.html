@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href='https://fonts.googleapis.com/css?family=Changa One' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQEEA</title>
+    <style>
+
+        body {
+            margin: 0;
+            font-family: 'Changa One';font-size: 22px;
+            color: white;
+            background-color: #111;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: #ffffff;
+            padding: 0px 10px;
+            position: relative;
+            z-index: 1;
+            border-bottom-color: solid #9a2f5e;
+            border-bottom: 3px solid #9a2f5e;
+        }
+
+        .header a {
+            color: black;
+            text-align: right;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            line-height: 20px;
+            border-radius: 4px;
+        }
+
+        .header a.logo {
+            font-size: 25px;
+            color: #9a2f5e;
+            padding: 20px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(255, 126, 169, 0.536);
+            margin-left: auto;
+        }
+         
+        .header span {
+            font-size: 32px;
+            cursor: pointer;
+            color: #9a2f5e;
+            padding: 20px;
+        }
+
+        .header .sidenav-button {
+            order: 1;
+        }
+
+        .header a:hover {
+            background-color: #ffffff;
+            color: black;
+        }
+
+        .header a.active {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #9a2f5e;
+            overflow-x: hidden;
+            padding-top: 60px;
+            text-decoration: none;
+            display: block;
+        }
+
+
+        .sidenav a {
+            list-style: none;
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #ffd1ec;
+            display: block;
+        }
+
+        .sidenav ul {
+            list-style: none; /* Removes the dots (bullet points) */
+            padding: 0; /* Removes default padding */
+            margin: 0; /* Removes default margin */
+         }
+
+        .sidenav li {
+            list-style: none; /* Ensures no bullets appear */
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+            font-size: 27px;
+            text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.614);
+            transition-duration: 0.5s;
+        }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+            }
+            .sidenav a {
+                font-size: 18px;
+            }
+        }
+
+        .container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-left: 260px;
+        }
+
+        /* Background Animation */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('pics/bggg.png') no-repeat center center fixed;
+            background-size: cover;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* Main Content Styling */
+        .content {
+            z-index: 1;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        /* Title Animation */
+        h1 {
+            font-size: 50px;
+            margin: 0;
+            animation: slideIn 2s ease-in-out;
+        }
+
+        /* Description Text */
+        p {
+            font-size: 18px;
+            margin-top: 10px;
+            animation: fadeIn 2.5s ease-in-out;
+        }
+
+        .start-btn {
+            margin-top: 20px;
+            padding: 15px 25px;
+            background-image: url("pics/play.png");
+            background-size: cover;
+            opacity: 0.95;
+            border: none;
+            border-radius: 50px;
+            font-size: 22px;
+            color: #3d001c;
+            text-shadow: 20px 25px 20px rgb(0, 0, 0);
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.5);
+            align-items: center;
+            justify-content: center;
+            transform: scale(1);
+            transition: transform 0.3s ease-in-out;
+            font-family: 'Changa One';
+        }
+
+        .start-btn:hover {
+            transform: scale(1.1);
+            background-color: #ff81ad;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateX(-50px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        .rumah img {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 700px;
+            height: auto;
+            background-repeat: no-repeat;
+            animation: slideIn 2s ease-in-out;;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="#default" class="logo">AQEEA</a>
+    </div>
+
+    <div class="sidenav">
+      <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="creators.html">Creators</a></li>
+          <li><a href="guide.html">Game Guide</a></li>
+      </ul>
+  </div>
+
+    <div class="background"></div>
+
+    <div class="container">
+        <div class="content">
+            <h1>Grandma's Sweets Delivery
+            </h1>
+            <p>Gather the candies, share the love!</p>
+            <button class="start-btn" onclick="startGame()"> <b>PLAY GAME</b> </button>
+        </div>
+    </div>
+
+    <div class="rumah"><img src="pics/rumah.png" alt="house"></div>
+
+    <script>
+        function startGame() {
+            window.location.href = "play.html";
+        }
+    </script>
+
+</body>
+</html>

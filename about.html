@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Changa One' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <style>
+body {
+    background-image: url(pics/bggg.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    margin: 0;
+    font-family: 'Changa One';
+    font-size: 22px;
+    color: white;
+    background-color: #ffffff;
+    overflow: hidden;
+    height: 100vh;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow: auto;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 250px;
+    right: 0;
+    height: 60px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    border-bottom: 3px solid #9a2f5e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header a {
+    color: black;
+    text-align: right;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 20px;
+    border-radius: 4px;
+}
+
+.header a.logo {
+    font-size: 25px;
+    color: #9a2f5e;
+    padding: 20px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(255, 126, 169, 0.536);
+    margin-left: auto;
+}
+
+.header span {
+    font-size: 32px;
+    cursor: pointer;
+    color: #9a2f5e;
+    padding: 20px;
+}
+
+.header .sidenav-button {
+    order: 1;
+}
+
+.header a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.header a.active {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.sidenav {
+    width: 250px;
+    height: 100vh;
+    background-color: #9a2f5e;
+    padding-top: 60px;
+    flex-shrink: 0;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #ffd1ec;
+    display: block;
+}
+
+.sidenav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidenav li {
+    list-style: none;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+    font-size: 27px;
+    text-shadow: 2px 2px 3px rgba(255, 255, 255, 0.614);
+    transition-duration: 0.5s;
+}
+
+.text {
+    padding-top: 40px;
+    text-align: center;
+}
+
+div.gallery {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 180px;
+    border-radius: 30px;
+}
+
+div.gallery:hover {
+    border: 1px solid #777;
+}
+
+div.gallery img {
+    width: 100%;
+    height: auto;
+    border-radius: 30px;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+}
+
+/* Cute Story Box */
+.story-box {
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 3px dashed #9a2f5e;
+    border-radius: 25px;
+    padding: 25px;
+    margin: 80px auto 30px auto; /* 👈 Added top margin to push it down */
+    width: 80%;
+    max-width: 800px;
+    color: #4a0033;
+    font-size: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    font-family: 'Changa One';
+    text-align: center;
+}
+
+.story-box h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #9a2f5e;
+    text-shadow: 1px 1px 2px rgba(255, 203, 229, 0.8);
+}
+.character-box {
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 3px dashed #9a2f5e;
+    border-radius: 25px;
+    padding: 25px;
+    margin: 30px auto;
+    width: 90%;
+    max-width: 1000px;
+    color: #4a0033;
+    font-family: 'Changa One';
+    text-align: center;
+}
+
+.character-box h2 {
+    font-size: 30px;
+    color: #9a2f5e;
+    margin-bottom: 20px;
+}
+
+.character-gallery {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.character-card {
+    width: 200px;
+    background-color: #ffeaf3;
+    border-radius: 20px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+
+.character-card:hover {
+    transform: translateY(-8px);
+}
+
+.character-card img {
+    width: 100%;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.character-card p {
+    font-size: 16px;
+    color: #4a0033;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <div class="sidenav">
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="creators.html">Creators</a></li>
+            <li><a href="guide.html">Game Guide</a></li>
+        </ul>
+    </div>
+
+    <div class="header">
+        <a href="#default" class="logo">AQEEA</a>
+    </div>
+
+    <div class="main-content">
+
+        <div class="story-box">
+            <h2>Game Storyline</h2>
+            <p>
+                Ellie is instructed by her mother to deliver a basket of sweets to her sick grandmother, her grandmother's house in the Peppermint Forest area. Unfortunately, during the journey, a rabbit known for his mischievous nature, Bandit the Bunny steals the basket of sweets, what will happen next? stay tuned.
+            </p>
+        </div>
+
+
+        <div class="character-box">
+            <h2>Characters</h2>
+            <div class="character-gallery">
+                <div class="character-card">
+                    <img src="pics/ellie.png" alt="Ellie">
+                    <p><strong>Ellie</strong><br>A girl with wonder in her eyes and courage in her heart.</p>
+                </div>
+                <div class="character-card">
+                    <img src="pics/mom.png" alt="Mum">
+                    <p><strong>Mom</strong><br>A gentle mother who holds her family close, with love in every touch.</p>
+                </div>
+                <div class="character-card">
+                    <img src="pics/ma.png" alt="Ma">
+                    <p><strong>Grandma</strong><br>A grandmother weakened by time, but never by kindness.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

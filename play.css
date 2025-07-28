@@ -1,0 +1,90 @@
+body {
+    background-image: url('pics/gm.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* This makes the background fixed */
+    margin: 0;
+    font-family: 'Pixelify Sans';
+    font-size: 22px;
+    padding: 0;
+    height: 100vh;
+}
+
+.rumah img {
+    position: absolute;
+    position: fixed;
+    z-index: 1;
+    bottom: 12%;
+    right: 0;
+    width: 700px;
+    height: auto;
+    background-repeat: no-repeat;
+    animation: slideIn 2s ease-in-out;
+}
+
+.bwh img {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 2; /* Ensure it stays above the background */
+    background-repeat: no-repeat;
+}
+
+.ats img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 2; /* Ensure it stays above the background */
+    background-repeat: no-repeat;
+}
+
+.play {
+    position: absolute;
+    text-align: center;
+    top: 100px; /* Adjust distance from the top */
+    left: 15%;
+    width: auto;
+}
+
+.title h1 {
+    color: rgb(255, 114, 166);
+    font-size: 80px;
+    margin-bottom: 20px; /* Add space between title and button */
+}
+
+.inline-text {
+    white-space: nowrap; /* Ensures "Grandma's Sweet" stays on the same line */
+}
+
+.button {
+    display: block;
+    margin: 0 auto; /* Center the button */
+    padding: 15px 80px;
+    font-size: 35px;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    color: #fff;
+    background-color: #ffffff;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #fc99c9;
+    border: 3px solid #ffaede;
+    color: #ffaede;
+    font-family: 'Pixelify Sans';
+}
+
+.button:hover {
+    background-color: #ffffff;
+}
+
+.button:active {
+    background-color: #ffc8e6;
+    box-shadow: 0 5px #ff8bb8;
+    color: white;
+    transform: translateY(4px);
+}

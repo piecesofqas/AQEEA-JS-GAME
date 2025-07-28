@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+  <title>AQEEA</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #222;
+      font-family: 'Pixelify Sans', cursive;
+    }
+
+    canvas {
+      display: block;
+      height: 100%;
+    }
+
+    .bwh img {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 0;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    .ats img {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 0;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    .level-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    color: white;
+    font-family: 'Pixelify Sans', cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6rem;
+    animation: fadeOut 2s ease-out 1s forwards;
+    z-index: 10;
+  }
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  #timer{
+    color: rgb(198, 45, 119);
+    font-size: 50px;
+    font-family: Pixelify Sans, cursive;
+    background-color: rgba(220, 125, 173, 0.6); /* semi-transparent black */
+    padding: 6px 30px;
+    border-radius: 6px;
+    border: 2px solid rgb(198, 45, 119);
+  }
+
+  .statusContainer {
+    position: absolute;
+    top: 65px; 
+    left: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    z-index: 3;
+  }
+
+  #livesContainer{
+    display: flex; 
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+  </style>
+
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+
+<div class="statusContainer">
+  <div id="livesContainer"></div>
+  <div id="timer">Time: 70</div>
+</div>
+
+<div class="ats"><img src="pics/ats.png"></div>
+<div class="level-screen"><b>LEVEL 1</b></div>
+<div class="bwh"><img src="pics/bwhh.png"></div>
+<audio id="bg-music" src="sounds/track.mp3" loop autoplay></audio>
+
+<script>
+
+let canJump = true;
+const keys = {};
+
+let lives = 5;
+const maxLives = 5;
+
+const heartImg = new Image();
+heartImg.src = 'pics/heart.png';
+
+let candiesCollected = 0;
+
+let gameOver = false;
+
+let timeLeft = 70; // seconds
+let timerInterval = setInterval(() => {
+  if (!gameOver) {
+    timeLeft--;
+    document.getElementById("timer").textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      gameOver = true;
+      setTimeout(() => {
+        let retry = confirm("Time's up! Try again?");
+        if (retry) {
+          location.reload();
+        }
+      }, 200);
+    }
+  }
+}, 1000);
+
+const bgMusic = document.getElementById('bg-music');
+bgMusic.volume = 0.4;
+
+window.addEventListener('keydown', () => {
+  bgMusic.play();
+});
+
+document.addEventListener("keydown", e => {
+  if ((e.code === "ArrowUp" || e.code === "Space" || e.code === "KeyW") && player.grounded && canJump) {
+    player.velY = -player.jumpPower;
+    player.grounded = false;
+    canJump = false;
+  }
+
+  keys[e.code] = true;
+});
+
+document.addEventListener("keyup", e => {
+  if (e.code === "ArrowUp" || e.code === "Space" || e.code === "KeyW") {
+    canJump = true;
+  }
+  keys[e.code] = false;
+});
+
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+ctx.imageSmoothingEnabled = false;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+const backgroundImage = new Image();
+backgroundImage.src = 'pics/gm.png';
+
+const groundTile = new Image();
+groundTile.src = 'pics/ground.png';
+
+const platformTile = new Image();
+platformTile.src = 'pics/platform.png';
+
+const playerImg = new Image();
+playerImg.src = 'pics/ell.png';
+
+const candyImg = new Image();
+candyImg.src = 'pics/candy.png';
+
+const sparkleImg = new Image();
+sparkleImg.src = 'pics/sparkle.png';
+
+const spikeImg = new Image();
+spikeImg.src = 'pics/spike.png';
+
+let currentScreen = 0;
+let sparkleTime = 0;
+
+let groundPattern, platformPattern;
+groundTile.onload = () => groundPattern = ctx.createPattern(groundTile, 'repeat');
+platformTile.onload = () => platformPattern = ctx.createPattern(platformTile, 'repeat');
+
+const player = {
+  x: 50,
+  y: 400,
+  width: 130,
+  height: 125,
+  color: "#ff4c60",
+  velX: 0,
+  velY: 0,
+  speed: 5,
+  jumpPower: 14,
+  grounded: false,
+  facing: "right"
+};
+
+const gravity = 0.6;
+const friction = 0.8;
+
+const screens = [
+  [
+    { x: 0, y: canvas.height - 100, width: canvas.width, height: 100 },
+    { x: 235, y: 235, width: 170, height: 50 },
+    { x: 400, y: 500, width: 140, height: 50 },
+    { x: 400, y: 190, width: 220, height: 50 },
+    { x: 600, y: 420, width: 140, height: 50 },
+    { x: 800, y: 340, width: 140, height: 50 },
+    { x: 1000, y: 260, width: 140, height: 50 },
+    { x: 1280, y: 370, width: 100, height: 260 }
+  ],
+  [
+    { x: 0, y: canvas.height - 100, width: canvas.width, height: 100 },
+    { x: 300, y: 480, width: 200, height: 50 },
+    { x: 550, y: 440, width: 200, height: 50 },
+    { x: 800, y: 400, width: 200, height: 50 },
+    { x: 1050, y: 360, width: 200, height: 50 }
+  ],
+  [
+    { x: 0, y: canvas.height - 100, width: canvas.width, height: 100 },
+    { x: 250, y: 480, width: 100, height: 50 },
+    { x: 300, y: 440, width: 140, height: 50 },
+    { x: 650, y: 440, width: 140, height: 50 },
+    { x: 1000, y: 440, width: 140, height: 50 },
+    { x: 1355, y: 440, width: 240, height: 50 }
+  ],
+  [
+    { x: 0, y: canvas.height - 100, width: canvas.width, height: 100 },
+    { x: 235, y: 360, width: 900, height: 50 },
+    { x: 1300, y: 480, width: 160, height: 50 }
+  ],
+  [
+    { x: 0, y: canvas.height - 100, width: canvas.width, height: 100 },
+    { x: 250, y: 500, width: 100, height: 130 },
+    { x: 550, y: 360, width: 100, height: 270 },
+    { x: 850, y: 220, width: 100, height: 410 },
+    { x: 1150, y: 500, width: 100, height: 130 }
+  ]
+];
+
+let candies = [
+  { screen: 0, x: 275, y: 195, width: 55, height: 45, collected: false },
+  { screen: 0, x: 440, y: 460, width: 55, height: 45, collected: false },
+  { screen: 0, x: 840, y: 300, width: 55, height: 45, collected: false },
+  { screen: 0, x: 1300, y: 330, width: 55, height: 45, collected: false },
+
+  { screen: 1, x: 330, y: 440, width: 55, height: 45, collected: false },
+  { screen: 1, x: 580, y: 400, width: 55, height: 45, collected: false },
+  { screen: 1, x: 830, y: 360, width: 55, height: 45, collected: false },
+  { screen: 1, x: 1080, y: 320, width: 55, height: 45, collected: false },
+
+  { screen: 2, x: 330, y: 400, width: 55, height: 45, collected: false },
+  { screen: 2, x: 680, y: 400, width: 55, height: 45, collected: false },
+  { screen: 2, x: 1030, y: 400, width: 55, height: 45, collected: false },
+  { screen: 2, x: 1385, y: 400, width: 55, height: 45, collected: false },
+
+  { screen: 3, x: 280, y: 310, width: 55, height: 45, collected: false },
+  { screen: 3, x: 495, y: 310, width: 55, height: 45, collected: false },
+  { screen: 3, x: 730, y: 310, width: 55, height: 45, collected: false },
+  { screen: 3, x: 990, y: 310, width: 55, height: 45, collected: false },
+
+  { screen: 4, x: 270, y: 450, width: 55, height: 45, collected: false },
+  { screen: 4, x: 570, y: 310, width: 55, height: 45, collected: false },
+  { screen: 4, x: 870, y: 170, width: 55, height: 45, collected: false },
+  { screen: 4, x: 1170, y: 450, width: 55, height: 45, collected: false }
+];
+const totalCandies = candies.length;
+
+let spikes = [
+  { screen: 1, x: 430, y: 430, width: 60, height: 50 },
+  { screen: 1, x: 680, y: 390, width: 60, height: 50 },
+  { screen: 1, x: 930, y: 350, width: 60, height: 50 },
+  { screen: 1, x: 1180, y: 310, width: 60, height: 50 },
+
+  { screen: 2, x: 350, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 430, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 510, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 590, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 670, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 750, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 830, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 910, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 990, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 1070, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 1150, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 1230, y: 580, width: 60, height: 50 }, 
+  { screen: 2, x: 1310, y: 580, width: 60, height: 50 },
+
+  { screen: 3, x: 280, y: 410, width: 60, height: 50, flipped: true },
+  { screen: 3, x: 370, y: 410, width: 60, height: 50, flipped: true},
+  { screen: 3, x: 450, y: 410, width: 60, height: 50, flipped: true },
+  { screen: 3, x: 530, y: 410, width: 60, height: 50, flipped: true },
+  { screen: 3, x: 620, y: 410, width: 60, height: 50, flipped: true },
+  { screen: 3, x: 710, y: 410, width: 60, height: 50, flipped: true },
+  { screen: 3, x: 800, y: 410, width: 60, height: 50, flipped: true },
+  { screen: 3, x: 890, y: 410, width: 60, height: 50, flipped: true },
+  { screen: 3, x: 980, y: 410, width: 60, height: 50, flipped: true },
+  { screen: 3, x: 370, y: 310, width: 60, height: 50 },
+  { screen: 3, x: 620, y: 310, width: 60, height: 50 },
+  { screen: 3, x: 890, y: 310, width: 60, height: 50 },
+
+  { screen: 4, x: 420, y: 580, width: 60, height: 50 },
+  { screen: 4, x: 720, y: 580, width: 60, height: 50 },
+  { screen: 4, x: 1020, y: 580, width: 60, height: 50 },
+  { screen: 4, x: 1300, y: 580, width: 60, height: 50 }
+];
+
+const dingSound = new Audio('sounds/ding.mp3');
+
+function checkCollision(p, b) {
+  return (
+    p.x < b.x + b.width &&
+    p.x + p.width > b.x &&
+    p.y < b.y + b.height &&
+    p.y + p.height > b.y
+  );
+}
+
+function loseLife() {
+  lives--;
+  if (lives <= 0) {
+    gameOver = true; // <-- halt the game
+    setTimeout(() => {
+      let retry = confirm("You failed! Try again?");
+      if (retry) {
+        location.reload();
+      }
+    }, 200);
+  } else {
+    player.x = 50;
+    player.y = 100;
+    player.velY = 0;
+  }
+}
+
+function getPlayerHitbox() {
+  return {
+    x: player.x + 20,
+    y: player.y + 20,
+    width: player.width - 40,
+    height: player.height - 20
+  };
+}
+
+function checkCandyAndSpikes() {
+  const playerHitbox = getPlayerHitbox();
+  
+  // Check for spike collisions
+  for (let spike of spikes) {
+    if (spike.screen === currentScreen) {
+      const spikeHitbox = {
+        x: spike.x + 10,
+        y: spike.y + 10,
+        width: spike.width - 20,
+        height: spike.height - 10
+      };
+      if (checkCollision(playerHitbox, spikeHitbox)) {
+        loseLife();
+        break;
+      }
+    }
+  }
+}
+
+function update() {
+  if (gameOver) return; 
+
+  if (keys["ArrowLeft"] || keys["KeyA"]) {
+  player.velX = -player.speed;
+  player.facing = "left";
+}
+if (keys["ArrowRight"] || keys["KeyD"]) {
+  player.velX = player.speed;
+  player.facing = "right";
+}
+
+  player.velY += gravity;
+  if (player.velY > 20) player.velY = 20;
+
+  // ✅ HORIZONTAL COLLISION SEPARATE
+  player.x += player.velX;
+  for (let plat of screens[currentScreen]) {
+    if (
+      player.y + player.height > plat.y &&
+      player.y < plat.y + plat.height &&
+      player.x + player.width > plat.x &&
+      player.x < plat.x + plat.width
+    ) {
+      if (player.velX > 0) {
+        player.x = plat.x - player.width;
+      } else if (player.velX < 0) {
+        player.x = plat.x + plat.width;
+      }
+      player.velX = 0;
+    }
+  }
+
+  checkCandyAndSpikes();
+
+  // ✅ VERTICAL COLLISION SEPARATE
+  player.y += player.velY;
+  player.grounded = false;
+  for (let plat of screens[currentScreen]) {
+    if (
+      player.x + player.width > plat.x &&
+      player.x < plat.x + plat.width &&
+      player.y + player.height > plat.y &&
+      player.y < plat.y + plat.height
+    ) {
+      if (player.velY > 0) {
+        player.y = plat.y - player.height;
+        player.velY = 0;
+        player.grounded = true;
+      } else if (player.velY < 0) {
+        player.y = plat.y + plat.height;
+        player.velY = 0;
+      }
+    }
+  }
+
+  if (player.x < 0) {
+  player.x = 0;
+}
+
+  player.velX *= friction;
+
+  sparkleTime += 0.03;
+
+  for (let candy of candies) {
+    if (!candy.collected && candy.screen === currentScreen && checkCollision(player, candy)) {
+  candy.collected = true;
+  candiesCollected++;
+  dingSound.currentTime = 0;
+  dingSound.play();
+     }
+  }
+
+  if (player.x + player.width > canvas.width) {
+  if (candiesCollected === totalCandies && currentScreen === screens.length - 1) {
+    setTimeout(() => {
+      clearInterval(timerInterval);
+      window.location.href = 'level2.html';
+    }, 1000);
+  } else if (currentScreen < screens.length - 1) {
+    currentScreen++;
+    player.x = 0;
+  } else {
+    player.x = canvas.width - player.width; // Prevents going further
+  }
+}
+
+  if (player.y > canvas.height) {
+    loseLife();
+  }
+
+  if (player.x < 0 && currentScreen > 0) {
+    currentScreen--;
+    player.x = canvas.width - player.width;
+  }
+
+  render();
+  requestAnimationFrame(update);
+}
+
+function render() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // ✅ DRAW STATIC BACKGROUND FIRST
+  if (backgroundImage.complete) {
+    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+  }
+
+  // ✅ DRAW PLATFORMS
+  for (let plat of screens[currentScreen]) {
+    ctx.save();
+    ctx.translate(plat.x, plat.y);
+    ctx.fillStyle = platformPattern || "#6a5acd";
+    ctx.fillRect(0, 0, plat.width, plat.height);
+    ctx.restore();
+  }
+
+  // ✅ DRAW PLAYER LAST
+if (playerImg.complete) {
+  ctx.save();
+  if (player.facing === "left") {
+  ctx.translate(player.x + player.width, player.y);
+  ctx.scale(-1, 1); // Flip the player horizontally
+  ctx.drawImage(playerImg, 0, 0, player.width, player.height);
+  ctx.restore();
+} else {
+  ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+}
+}
+
+  // ✅ DRAW CANDIES
+  for (let candy of candies) {
+    if (candy.screen === currentScreen && !candy.collected) {
+      ctx.drawImage(candyImg, candy.x, candy.y, candy.width, candy.height);
+      const sparkleScale = 1 + Math.sin(sparkleTime * 3) * 0.3;
+      ctx.save();
+      ctx.translate(candy.x + candy.width / 2, candy.y + candy.height / 2);
+      ctx.scale(sparkleScale, sparkleScale);
+      ctx.drawImage(sparkleImg, -candy.width / 2, -candy.height / 2, candy.width, candy.height);
+      ctx.restore();
+    }
+  }
+
+  // ✅ DRAW SPIKES
+  for (let spike of spikes) {
+    if (spike.screen === currentScreen) {
+      ctx.save();
+      ctx.translate(spike.x, spike.y);
+      if (spike.flipped) {
+        ctx.scale(1, -1);
+        ctx.drawImage(spikeImg, 0, -spike.height, spike.width, spike.height);
+      } else {
+        ctx.drawImage(spikeImg, 0, 0, spike.width, spike.height);
+      }
+      ctx.restore();
+    }
+  }
+
+  function drawLives() {
+  const container = document.getElementById("livesContainer");
+  container.innerHTML = ''; // Clear current hearts
+  for (let i = 0; i < lives; i++) {
+    const img = document.createElement('img');
+    img.src = heartImg.src;
+    img.style.width = "40px";
+    img.style.marginRight = "5px";
+    container.appendChild(img);
+  }
+}
+
+drawLives()
+}
+
+// Start the game loop
+update();
+</script>
+</body>
+</html>

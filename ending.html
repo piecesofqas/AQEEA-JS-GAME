@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AQEEA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('pics/backgroundone.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100%;
+            background-color: #f0f0f0;
+            font-family: 'Pixelify Sans', cursive;
+        }
+
+        .box {
+            width: 100vw;
+            height: 100px;
+            background-color: white;
+            position: relative;
+            border-bottom: 2px solid #ddd;
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+            padding-right: 100px;
+            margin-top: 45px; /* Push it below the image */
+            z-index: 3;
+        }
+
+        .text {
+            font-size: 26px;
+            color: #333;
+        }
+
+    .fade-wrapper {
+      height: 100%;
+      width: 100%;
+      animation: fadeIn 2s ease-in-out;
+      background-color: transparent; /* Ensure the background is transparent */
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+        .bwh img {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 3; /* Ensure it stays above the background */
+            background-repeat: no-repeat;
+        }
+
+        .ats img {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 2;
+            background-repeat: no-repeat;
+        }
+
+  </style>
+
+</head>
+<body>
+
+  <div class="fade-wrapper"></div>
+  <div class="ats"><img src="pics/ats.png"></div>
+  <div class="box">
+    <p class="text"><b>Finally, Ellie reached her grandma's house safely with the candies she brought.<br>
+    Congrats!</b></p>
+  </div>
+  <div class="bwh"><img src="pics/bwhh.png"></div>
+
+</body>
+</html>

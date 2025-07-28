@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>AQEEA</title>
+        <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+      </head>
+
+<body>
+
+    <style>
+ *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url('pics/gm.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 100%;
+  background-color: #f0f0f0;
+  font-family: 'Pixelify Sans', cursive;
+}
+
+.box {
+  width: 100vw;
+  height: 100px;
+  background-color: white;
+  position: relative;
+  border-bottom: 2px solid #ddd;
+  display: flex;
+  align-items: flex-start;
+  padding: 20px;
+  padding-right: 100px;
+  margin-top: 45px; /* Push it below the image */
+  z-index: 3;
+}
+
+.text {
+  font-size: 26px;
+  color: #333;
+}
+
+.next-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 15px 27px;
+  font-size: 22px;
+  background-color: #fb9bc3;
+  border: none;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  font-family: 'Pixelify Sans', cursive;
+}
+
+.next-btn:hover {
+  background-color: #fc7bbc;
+}
+
+.next-btn:focus {
+  outline: none;
+  outline: 2px solid #fb9bc3;
+}
+
+.bwh img {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 3; /* Ensure it stays above the background */
+    background-repeat: no-repeat;
+}
+
+.ats img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 2;
+    background-repeat: no-repeat;
+}
+
+.mom-img {
+            position: fixed;
+            bottom: 40px; /* Adjust this to position it above bwhh image */
+            left: 70%;
+            transform: translateX(-50%);
+            width: 400px; /* Adjust size as needed */
+            z-index: 2;
+        }
+
+        .ellie-img {
+            position: fixed;
+            bottom: -70px; /* Adjust this to position it above bwhh image */
+            left: 30%;
+            transform: translateX(-50%);
+            width: 380px; /* Adjust size as needed */
+            z-index: 2;
+        }
+
+        .pie-img {
+            position: fixed;
+            bottom: -25px; /* Adjust this to position it above bwhh image */
+            left: 0;
+            width: 100%; /* Adjust size as needed */
+            z-index: 1;
+        }
+
+        .mom-img, .ellie-img {
+            max-width: 40vw; /* scales nicely */
+        }
+
+        .text {
+           font-size: 26px;
+           color: #333;
+           animation: fadeIn 0.4s ease-in-out;
+        }
+
+</style>
+
+<div class="ats"><img src="pics/ats.png"></div>
+
+<div class="box">
+    <p class="text" id="story-text">
+        ELLIE: Yes, mom?
+    </p>
+    <button class="next-btn" onclick="nextText()" aria-label="Next dialogue line">Next</button>
+  </div>
+
+  <div class="bwh"><img src="pics/bwhh.png"></div>
+
+  <img src="pics/mom.png" class="mom-img" id="mom" alt="Pixel art of Ellie's mom talking" />
+  <img src="pics/ellie.png" class="ellie-img" id="ellie" alt="Pixel art of Ellie listening" />
+  <img src="pics/pie.png" class="pie-img" id="pie" alt="Pixel house background" />
+  
+  
+  <script>
+    const storyLines = [ 
+        "ELLIE: Yes, mom?", 
+        "MOM: Grandmother is ill, her house is in the forest. Can you deliver those sweets to her?",
+        "ELLIE: Yes I can, mom",
+        "MOM: Be careful, Ellie!", 
+        "ELLIE: Okay!!",
+        "Little did they know, there was a hungry bunny that was eavesdropping to their talk just now..",
+        "The bunny silently follows Ellie into the forest.",
+        "The bunny steals the candies from Ellie's hand and ran away.",
+        "ELLIE: Hey, give me the candies back!!",
+        "The bunny ran as Ellie tries to catch him. But, the candies spilled from the basket as the bunny ran away.",
+        "ELLIE: Oh, no!!!"
+    ];
+
+    let currentLine = 0;
+
+    function nextText() {
+    currentLine++;
+
+    if (currentLine < storyLines.length) {
+        const line = storyLines[currentLine];
+        document.getElementById("story-text").textContent = line;
+
+        updateScene(currentLine); // 👈 Add this line
+
+        // Character animations
+        const momImg = document.getElementById("mom");
+        const ellieImg = document.getElementById("ellie");
+        momImg.classList.remove("animate");
+        ellieImg.classList.remove("animate");
+        void momImg.offsetWidth;
+        void ellieImg.offsetWidth;
+
+        if (line.startsWith("MOM")) {
+            momImg.classList.add("animate");
+        } else if (line.startsWith("ELLIE")) {
+            ellieImg.classList.add("animate");
+        }
+
+    } else {
+        document.querySelector(".next-btn").textContent = "Start Your Adventure!";
+        document.querySelector(".next-btn").disabled = true;
+        document.querySelector(".next-btn").style.opacity = 0.7;
+
+        setTimeout(() => {
+            window.location.href = "ins.html";
+        }, 2000);
+    }
+}
+
+
+    function updateBackground(index) {
+    const body = document.body;
+
+    if (index <= 4) {
+        body.style.backgroundImage = "url('pics/gm.png')"; // At home
+    } else if (index <= 6) {
+        body.style.backgroundImage = "url('pics/forest.png')"; // On the way
+    } else {
+        body.style.backgroundImage = "url('pics/chase.png')"; // Bunny chase
+    }
+}
+
+function updateScene(index) {
+    const mom = document.getElementById("mom");
+    const ellie = document.getElementById("ellie");
+    const pie = document.getElementById("pie");
+    const body = document.body;
+
+    // Background changes
+    if (index <= 4) {
+        body.style.backgroundImage = "url('pics/gm.png')";
+        mom.style.display = "block";
+        ellie.style.display = "block";
+        pie.style.display = "block";
+    } else if (index <= 6) {
+        body.style.backgroundImage = "url('pics/forest.png')";
+        mom.style.display = "none";
+        ellie.style.display = "none";
+        pie.style.display = "none";
+    } else {
+        body.style.backgroundImage = "url('pics/chase.png')";
+        mom.style.display = "none";
+        ellie.style.display = "none";
+        pie.style.display = "none";
+    }
+}
+
+
+</script>
+  
+</body>

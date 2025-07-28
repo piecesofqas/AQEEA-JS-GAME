@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AQEEA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('pics/gm.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100%;
+            background-color: #f0f0f0;
+            font-family: 'Pixelify Sans', cursive;
+        }
+
+        .box {
+            width: 100vw;
+            height: 100px;
+            background-color: white;
+            position: relative;
+            border-bottom: 2px solid #ddd;
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+            padding-right: 100px;
+            margin-top: 45px; /* Push it below the image */
+            z-index: 3;
+        }
+
+        .text {
+            font-size: 26px;
+            color: #333;
+        }
+
+        .next-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 15px 27px;
+            font-size: 22px;
+            background-color: #fb9bc3;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            font-family: 'Pixelify Sans', cursive;
+        }
+
+        .next-btn:hover {
+            background-color: #fc7bbc;
+        }
+
+        .next-btn:focus {
+            outline: none;
+        }
+
+        .bwh img {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 3; /* Ensure it stays above the background */
+            background-repeat: no-repeat;
+        }
+
+        .ats img {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 2;
+            background-repeat: no-repeat;
+        }
+
+        .ellie-img {
+            position: fixed;
+            bottom: -79px; /* Adjust this to position it above bwhh image */
+            left: 20%;
+            transform: translateX(-50%);
+            width: 340px; /* Adjust size as needed */
+            z-index: 2;
+        }
+
+        .mom-img {
+            position: fixed;
+            bottom: 40px; /* Adjust this to position it above bwhh image */
+            left: 35%;
+            transform: translateX(-50%);
+            width: 380px; /* Adjust size as needed */
+            z-index: 2;
+        }
+
+        .pie-img {
+            position: fixed;
+            bottom: -30px; /* Adjust this to position it above bwhh image */
+            left: 0;
+            width: 100%; /* Adjust size as needed */
+            z-index: 1;
+        }
+
+    </style>
+
+    <div class="ats"><img src="pics/ats.png"></div>
+
+    <div class="box">
+        <p class="text">Once upon a time, there was a girl named Ellie. She lived with her mother in a peaceful village near a forest.</p>
+        <button class="next-btn" onclick="location.href='scene10.html'">Next</button>
+    </div>
+
+    <div class="bwh"><img src="pics/bwhh.png"></div>
+
+    <img src="pics/mom.png" class="mom-img" alt="Mom Image">
+    <img src="pics/ellie.png" class="ellie-img" alt="Ellie Image">
+
+    <img src="pics/pie.png" class="pie-img" alt="HOUSE Image">
+
+</body>
+</html>
